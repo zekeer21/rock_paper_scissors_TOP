@@ -5,54 +5,87 @@ function getComputerChoice(){
     return choice;
 }
 
-let comp_score = 0;
-let player_score = 0;
+let compScore = 0;
+let playerScore = 0;
+const outputDiv = document.getElementById('output');
 
 function playRound(playerSelection, computerSelection){
+    displayResult(playerSelection, computerSelection)
+    checkWinner();
+}
 
+function displayResult(playerSelection, computerSelection){
+    const paraWin = document.createElement('p');
     if ((playerSelection === "rock" &&  computerSelection === "scissors") || 
     (playerSelection === "scissors" && computerSelection === "paper") || 
     (playerSelection === "paper" && computerSelection === "rock")){
-        player_score += 1;
-        console.log(`Player wins! ${playerSelection} beats ${computerSelection}`);
+        playerScore += 1;
+        paraWin.textContent=`Player wins! ${playerSelection} beats ${computerSelection} Player score:${playerScore}`;
     }
     else if((computerSelection === "rock" && playerSelection === "scissors") ||
         (computerSelection === "scissors" && playerSelection === "paper") ||
         (computerSelection === "paper" && playerSelection === "rock")){
-        comp_score += 1;
-        console.log(`Computer wins! ${computerSelection} beats ${playerSelection}`);
+        compScore += 1;
+        paraWin.textContent=`Computer wins! ${computerSelection} beats ${playerSelection} Computer score:${compScore}`;
     }
 
     if (playerSelection === computerSelection){
-        console.log(`It's a Tie: Player: ${playerSelection} vs computer: ${computerSelection}`);
+        paraWin.textContent=`It's a Tie: Player: ${playerSelection} vs computer: ${computerSelection} `;
     }
+    outputDiv.appendChild(paraWin);
+}
+const winnerDiv = document.createElement('p');
+const roundDiv = document.createElement('p');
+const button = document.querySelectorAll('button');
+
+function checkWinner(){
+    if (compScore === 5 && playerScore === 5){
+        roundDiv.textContent = 'Round Over!!'
+        winnerDiv.textContent = `Tie Round!! Player:${compScore} Computer:${playerScore}`;
+        outputDiv.textContent = ''
+    }
+    button.disabled = true
+    if (compScore>playerScore && compScore === 5){
+        roundDiv.textContent = 'Round Over!!'
+        winnerDiv.textContent = `Computer Wins!! Score:${compScore}`;
+        outputDiv.textContent = ''
+        button.disabled = true
+    }else if (playerScore>compScore && playerScore === 5){
+        roundDiv.textContent = 'Round Over!!'
+        winnerDiv.textContent = `Player Wins!! Score: ${playerScore}`;
+        outputDiv.textContent = ''
+        button.disabled = true
+    }
+    button.disabled = true
     
+    outputDiv.appendChild(winnerDiv);
+    outputDiv.appendChild(roundDiv)
 }
 
-function playGame(){
-    let player;
-    for (let i =0; i < 5; i++){
-        let computer = getComputerChoice();
-        player = prompt("Enter a choice");
-        playRound(player, computer);
-        if (player === ''){
-            console.log("No choice entered");
-            break;
-        }
-    }
+let body = document.querySelector('body')
+const rock = document.getElementById('rock');
+const paper = document.getElementById('paper');
+const scissors = document.getElementById('scissors');
+const reset = document.querySelector('.resetButton')
 
-    if (player_score > comp_score){
-        console.log(`Player WINS!! Score:${player_score}`);
-    }
-    else if (comp_score > player_score){
-        console.log(`Computer WINS!! Score:${comp_score}`);
-    }
-    else if (comp_score === player_score && comp_score !=0 && player_score !=0){
-        console.log("It's a Tie");
-    }
-    else{
-        console.log("no score");
-    }
-}
+rock.addEventListener('click', (e)=>{
+    let computer = getComputerChoice();
+    let targetChoice = e.target.id;
+    playRound(targetChoice, computer)
+})
 
-playGame()
+paper.addEventListener('click', (e)=>{
+    let computer = getComputerChoice();
+    let targetChoice = e.target.id;
+    playRound(targetChoice, computer);
+})
+
+scissors.addEventListener('click', (e)=>{
+    let computer = getComputerChoice();
+    let targetChoice = e.target.id;
+    playRound(targetChoice, computer);
+})
+
+reset.addEventListener('click', ()=>{
+    window.location.reload();
+})
