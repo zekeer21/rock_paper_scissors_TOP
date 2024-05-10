@@ -8,6 +8,9 @@ function getComputerChoice(){
 let compScore = 0;
 let playerScore = 0;
 const outputDiv = document.getElementById('output');
+const displayScore = document.querySelector('.displayScore');
+const displayPlayerScore = document.querySelector('.scorePlayer')
+const displayCompScore = document.querySelector('.scoreComp')
 
 function playRound(playerSelection, computerSelection){
     displayResult(playerSelection, computerSelection)
@@ -15,25 +18,26 @@ function playRound(playerSelection, computerSelection){
 }
 
 function displayResult(playerSelection, computerSelection){
-    const paraWin = document.createElement('p');
     if ((playerSelection === "rock" &&  computerSelection === "scissors") || 
     (playerSelection === "scissors" && computerSelection === "paper") || 
     (playerSelection === "paper" && computerSelection === "rock")){
-        playerScore += 1;
-        paraWin.textContent=`Player wins! ${playerSelection} beats ${computerSelection} Player score:${playerScore}`;
+        playerScore++;
+        outputDiv.textContent=`Player wins! ${playerSelection} beats ${computerSelection}`;
     }
     else if((computerSelection === "rock" && playerSelection === "scissors") ||
         (computerSelection === "scissors" && playerSelection === "paper") ||
         (computerSelection === "paper" && playerSelection === "rock")){
-        compScore += 1;
-        paraWin.textContent=`Computer wins! ${computerSelection} beats ${playerSelection} Computer score:${compScore}`;
+        compScore++;
+        outputDiv.textContent=`Computer wins! ${computerSelection} beats ${playerSelection}`;
     }
 
     if (playerSelection === computerSelection){
-        paraWin.textContent=`It's a Tie: Player: ${playerSelection} vs computer: ${computerSelection} `;
+        outputDiv.textContent=`It's a Tie: Player: ${playerSelection} vs computer: ${computerSelection} `;
     }
-    outputDiv.appendChild(paraWin);
+    displayCompScore.textContent = `${compScore}`
+    displayPlayerScore.textContent = `${playerScore}`
 }
+
 const winnerDiv = document.createElement('p');
 const roundDiv = document.createElement('p');
 const button = document.querySelectorAll('button');
@@ -41,24 +45,15 @@ const button = document.querySelectorAll('button');
 function checkWinner(){
     if (compScore === 5 && playerScore === 5){
         roundDiv.textContent = 'Round Over!!'
-        winnerDiv.textContent = `Tie Round!! Player:${compScore} Computer:${playerScore}`;
-        outputDiv.textContent = ''
+        outputDiv.textContent = `Tie Round!! Player:${compScore} Computer:${playerScore}`;
     }
-    button.disabled = true
     if (compScore>playerScore && compScore === 5){
+        outputDiv.textContent = `Computer Wins!! Score:${compScore}`;
         roundDiv.textContent = 'Round Over!!'
-        winnerDiv.textContent = `Computer Wins!! Score:${compScore}`;
-        outputDiv.textContent = ''
-        button.disabled = true
     }else if (playerScore>compScore && playerScore === 5){
+        outputDiv.textContent = `Player Wins!! Score: ${playerScore}`;
         roundDiv.textContent = 'Round Over!!'
-        winnerDiv.textContent = `Player Wins!! Score: ${playerScore}`;
-        outputDiv.textContent = ''
-        button.disabled = true
     }
-    button.disabled = true
-    
-    outputDiv.appendChild(winnerDiv);
     outputDiv.appendChild(roundDiv)
 }
 
